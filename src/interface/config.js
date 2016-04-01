@@ -4,7 +4,7 @@
     // 对外接口模块
     var modules = [
         //'./../interface/api-loader',
-        './../db/db-loader',
+        //'./../db/db-loader',
         './../sys/admin',
         './../user/user'
     ];

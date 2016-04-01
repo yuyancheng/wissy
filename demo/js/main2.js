@@ -7,15 +7,16 @@ doc.ready(function(){
 
     var msgForm = $('#msg_form');
     var urlRoot = 'api';
-    var url = urlRoot + '/sys/removeAdmin';
+    var url = urlRoot + '/user/logout';
 
     $('#msg_submit').bind('click', function(){
         $.ajax({
             url: url,
-            type: 'delete',
+            type: 'post',
             data: {
-                pwd: 123456,
-                name: 'YYC'
+                //'cuisine': Italian,
+                //'address.zipcode': '10075',
+                '_id': '56fe3497acb186082963ec0b'
             },
             success: function(dt){
                 console.log(dt);

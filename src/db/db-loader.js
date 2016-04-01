@@ -5,7 +5,8 @@
 
     var MongoClient = require('mongodb').MongoClient,
         assert = require('assert'),
-        url = 'mongodb://localhost:27017/test';
+        DBName = 'wissy',
+        url = 'mongodb://localhost:27017/';
 
 
     dbLoader.init = function (){
@@ -16,54 +17,66 @@
         }];
 
         var insertDocument = function(db, callback) {
-            db.collection(db_tabs[0].name).insertOne( {
-                "address" : {
-                    "street" : "2 Avenue",
-                    "zipcode" : "10075",
-                    "building" : "1480",
-                    "coord" : [ -73.9557413, 40.7720266 ]
-                },
-                "borough" : "Manhattan",
-                "cuisine" : "Italian",
-                "grades" : [
-                    {
-                        "date" : new Date("2014-10-01T00:00:00Z"),
-                        "grade" : "A",
-                        "score" : 11
-                    },
-                    {
-                        "date" : new Date("2014-01-16T00:00:00Z"),
-                        "grade" : "B",
-                        "score" : 17
-                    }
-                ],
-                "name" : "Vella",
-                "restaurant_id" : "41704620"
-            }, function(err, result) {
+            db.collection(db_tabs[0].name).insertOne( {}, function(err, result) {
                 assert.equal(err, null);
                 console.log("Inserted a document into the restaurants collection.");
                 callback();
             });
         };
 
-        dbLoader.query = function(){
 
-        };
 
-        dbLoader.add = function(){
-            MongoClient.connect(url, function(err, db) {
-                assert.equal(null, err);
-                console.log("Connected correctly to server.");
-                insertDocument(db, function() {
+    };
+
+    function setDB(db){
+        if(url){
+            DBName = db;
+        }
+    }
+
+    function setURL(url){
+        if(url){
+            url = url;
+        }
+        url = url;
+    }
+
+    function connect(fun){
+        MongoClient.connect(url + DBName, function(err, db) {
+            assert.equal(null, err);
+            console.log("Connected correctly to server.");
+            fun(db);
+        });
+    }
+
+    function query(sets, factor, fun){
+        connect(function(db){
+            var cursor = db.collection(sets).find(factor);
+            cursor.each(function(err, doc){
+                assert.equal(err, null);
+                if (doc != null) {
+                    console.dir(doc);
+                    if(fun) fun(doc);
+                } else {
                     db.close();
-                });
-                //db.close();
+                }
             });
-        };
+        });
+    };
 
+    function add(sets, dt, factor, fun){
+        connect(function(db){
+            db.collection(sets).insertOne(dt, function(err, result) {
+                assert.equal(err, null);
+                if(fun) fun(result);
+                db.close();
+            });
+        });
     };
 
 
     module.exports = dbLoader;
+    module.exports.query = query;
+    module.exports.add = add;
 
 })(exports, require, module);
