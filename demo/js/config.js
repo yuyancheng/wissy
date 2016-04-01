@@ -11,8 +11,15 @@ var app = angular.module('app').config(
             app.constant = $provide.constant;
             app.value = $provide.value;
 
+            app.code = {
+                'OK': '1111',
+                'ERROR': '1110',
+                'WARNING': '1110',
+                'NOT_FOUND': '0000'
+            };
+
             // API路径集合
-            app.urlRoot = '/root';
+            app.urlRoot = '/api';
 
             var common = {
                 list: 'list.iv',
@@ -40,6 +47,7 @@ var app = angular.module('app').config(
 
                 login: app.urlRoot + 'user/login',
                 logout: app.urlRoot + 'user/logout',
+                register: app.urlRoot + 'user/register',
                 admin: {
                     check: {
                         getDoctors: app.urlRoot + 'admin/check/getDoctors',

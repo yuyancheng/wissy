@@ -33,22 +33,28 @@
             for(var i=0; i<ln; i++){
                 var api = md.APIs[i];
                 if(!api.type || api.type.length === 0){
-                    api.type = ['get', 'post'];
+                    api.type = ['post'];
                 }
                 var l = api.type.length;
                 for(var j=0; j<l; j++){
                     switch (api.type[j]){
                         case 'get':
-                            if(api.path && api.fun) exp.get(api.path, api.fun);
+                            //if(api.path && api.fun) exp.get(api.path, api.fun.ref);
+                            if(api.path && api.fun) exp.get(api.path, function(req, res){
+                                api.fun.ref(req.query, res);
+                            });
                             break;
                         case 'post':
-                            if(api.path && api.fun) exp.post(api.path, api.fun);
+                            //if(api.path && api.fun) exp.post(api.path, api.fun.ref);
+                            if(api.path && api.fun) exp.post(api.path, function(req, res){
+                                api.fun.ref(req.body, res);
+                            });
                             break;
                         case 'delete':
-                            if(api.path && api.fun) exp.delete(api.path, api.fun);
+                            if(api.path && api.fun) exp.delete(api.path, api.fun.ref);
                             break;
                         case 'update':
-                            if(api.path && api.fun) exp.update(api.path, api.fun);
+                            if(api.path && api.fun) exp.update(api.path, api.fun.ref);
                             break;
                         default: break;
                     }

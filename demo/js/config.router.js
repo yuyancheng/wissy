@@ -62,11 +62,11 @@ angular.module('app').run(
             })
             .state('access.signup', {
                 url: '/signup',
-                templateUrl: 'tpl/enterprise/signup.html',
+                templateUrl: 'tpl/signup.html',
                 resolve: {
                     deps: ['uiLoad',
                         function (uiLoad) {
-                            return uiLoad.load(['js/controllers/enterprise/signup.js']);
+                            return uiLoad.load(['js/controllers/signup.js']);
                         }
                     ]
                 }

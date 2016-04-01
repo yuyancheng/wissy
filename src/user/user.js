@@ -8,8 +8,9 @@
         };
 
     user.APIs = [
-        { 'path': '/user/logout', type: ['get', 'post', 'delete'], 'fun': logout },
-        { 'path': '/user/login', type: ['get', 'post', 'delete'], 'fun': login  }
+        { 'path': '/user/logout', type: ['get', 'post'], 'fun': {'ref': logout} },
+        { 'path': '/user/login', type: ['post'], 'fun': {'ref': login, 'param': ['telephone', 'password']}  },
+        { 'path': '/user/register', type: ['post'], 'fun': {'ref': register, 'param': ['telephone', 'name', 'password']}  },
     ];
 
     user.init = function (exp){
@@ -72,8 +73,8 @@
     function logout (req, res){
         var filter = {};
 
-        for(var k in req.query){
-            filter[k] = req.query[k];
+        for(var k in req){
+            filter[k] = req[k];
         }
 
         db_loader.query('user', filter, function(data){
@@ -83,8 +84,29 @@
         });
     };
 
+    function register (req, res){
+
+        var user_info = {};
+        if(!req.telephone || req.password){
+            res.send({
+                msg: '缺少必要参数',
+                code: code.ERROR
+            });
+            return;
+        }
+        if(req.telephone){
+            user_info.telephone = req.telephone;
+        }
+        db_loader.add('user', dt, null, function(data){
+            if(data){
+                res.send(data);
+            }
+        });
+    };
+
     module.exports = user;
     module.exports.login = login;
     module.exports.logout = logout;
+    module.exports.register = register;
 
 })(exports, require, module);

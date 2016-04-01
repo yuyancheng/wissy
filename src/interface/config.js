@@ -5,7 +5,7 @@
     var modules = [
         //'./../interface/api-loader',
         //'./../db/db-loader',
-        './../sys/admin',
+        //'./../sys/admin',
         './../user/user'
     ];
 
