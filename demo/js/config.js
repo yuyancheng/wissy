@@ -19,7 +19,7 @@ var app = angular.module('app').config(
             };
 
             // API路径集合
-            app.urlRoot = '/api';
+            app.urlRoot = '/api/';
 
             var common = {
                 list: 'list.iv',

@@ -21,53 +21,39 @@
         }
     };
 
-    function login (req, res){
-        /*if(req.query.name === 'YYC' && req.query.pwd === '123456'){
-            res.send( {
-                dsaf: 213,
-                'aaa': {
-                    a: 23,
-                    b: [213,3234]
-                },
-                code: code.OK
-            } );
-        }else{
-            res.send( code.ERROR );
-        }*/
+    function login (req, res){;
 
-        var dt = {
-            "address" : {
-                "street" : "2 Avenue",
-                "zipcode" : "10075",
-                "building" : "1480",
-                "coord" : [ -73.9557413, 40.7720266 ]
-            },
-            "borough" : "Manhattan",
-            "cuisine" : "Italian",
-            "grades" : [
-                {
-                    "date" : new Date("2014-10-01T00:00:00Z"),
-                    "grade" : "A",
-                    "score" : 11
-                },
-                {
-                    "date" : new Date("2014-01-16T00:00:00Z"),
-                    "grade" : "B",
-                    "score" : 17
-                }
-            ],
-            "name" : "Vella",
-            "restaurant_id" : "41704620"
+        var param_names = [];
+
+        if(!req.body.telephone && req.body.telephone != '0'){
+            param_names.push('telephone');
+        }
+
+        if(!req.body.password && req.body.password != '0'){
+            param_names.push('password');
+        }
+
+        if((!req.body.telephone && req.body.telephone != '0') || (!req.body.password && req.body.password != '0')) {
+            res.send({
+                msg: '缺少必要参数：' + param_names.toString(),
+                code: code.ERROR
+            });
+            return;
+        }
+
+        var filter = {
+            telephone: req.body.telephone
         };
 
-        db_loader.add('user', dt, null, function(data){
-            if(data){
-                res.send(data);
+        db_loader.query('user', filter, function(data){
+            console.log('login.query: ' + data);
+            if(data[0].password == req.body.password){
+                res.send({
+                    code: code.OK,
+                    msg: 'Validate success!'
+                });
             }
         });
-
-
-       // db_loader.query('restaurants', { "cuisine": "Italian", "address.zipcode": "10075" });
     };
 
     function logout (req, res){
@@ -84,22 +70,58 @@
         });
     };
 
-    function register (req, res){
-
+    function register(req, res){
         var user_info = {};
-        if(!req.telephone || req.password){
+        var param_names = [];
+        var filter = {};
+
+        if(!req.body.name && req.body.name != '0'){
+            param_names.push('name');
+        }else{
+            user_info.name = req.body.name;
+        }
+        if(!req.body.telephone && req.body.telephone != '0'){
+            param_names.push('telephone');
+        }else{
+            user_info.telephone = req.body.telephone;
+        }
+        if(!req.body.password && req.body.password != '0'){
+            param_names.push('password');
+        }else{
+            user_info.password = req.body.password;
+        }
+        if(!req.body.name || !req.body.telephone || !req.body.password) {
             res.send({
-                msg: '缺少必要参数',
+                msg: '缺少必要参数：' + param_names.toString(),
                 code: code.ERROR
             });
             return;
         }
-        if(req.telephone){
-            user_info.telephone = req.telephone;
-        }
-        db_loader.add('user', dt, null, function(data){
+
+        var filter = {
+            telephone: req.body.telephone
+        };
+
+        // 查询账号是否已注册
+        db_loader.query('user', filter, function(data){
+            // 查账号已注册
             if(data){
-                res.send(data);
+                //console.info('register.query: ' + data);
+                res.send({
+                    code: code.EXIST,
+                    msg: 'This user is exist!'
+                });
+            }else{
+                // 添加用户信息
+                db_loader.add('user', user_info, null, function(data){
+                    //console.info('register.add: ' + data);
+                    if(data && data.ok){
+                        res.send({
+                            code: code.OK,
+                            msg: 'Register successfully!'
+                        });
+                    }
+                });
             }
         });
     };

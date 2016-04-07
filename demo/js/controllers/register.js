@@ -8,13 +8,14 @@ app.controller('SignupFormController', ['$scope', '$http', '$state',
         $scope.signup = function () {
             $http.post(app.url.register, {
                 telephone: $scope.user.telephone,
-                number: $scope.user.name,
+                name: $scope.user.name,
                 password: $scope.user.password
             }).then(function (response) {
                 if (response.data.code == app.code.OK) {
-                    $state.go('access.signin');
+                    $state.go('access.login');
                 } else {
-                    $scope.authError = '注册失败！';
+                    $scope.authError = response.data.msg;
+                    alert(response.data.msg);
                 }
             }, function (x) {
                 $scope.authError = '服务器错误！';

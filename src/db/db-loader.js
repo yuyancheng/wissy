@@ -24,8 +24,6 @@
             });
         };
 
-
-
     };
 
     function setDB(db){
@@ -51,16 +49,19 @@
 
     function query(sets, factor, fun){
         connect(function(db){
+            var data = [];
             var cursor = db.collection(sets).find(factor);
-            cursor.each(function(err, doc){
+            cursor.each(function(err, dt){
                 assert.equal(err, null);
-                if (doc != null) {
-                    console.dir(doc);
-                    if(fun) fun(doc);
-                } else {
+                if (dt != null) {
+                    data.push(dt);
+                    //console.dir(doc);
+                }else{
                     db.close();
                 }
             });
+            data = cursor.objsLeftInBatch();
+            fun(data);
         });
     };
 
@@ -68,7 +69,9 @@
         connect(function(db){
             db.collection(sets).insertOne(dt, function(err, result) {
                 assert.equal(err, null);
-                if(fun) fun(result);
+                if(fun) {
+                    fun(result);
+                }
                 db.close();
             });
         });

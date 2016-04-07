@@ -10,7 +10,7 @@ angular.module('app').run(
     function ($stateProvider, $urlRouterProvider, JQ_CONFIG) {
         //$urlRouterProvider.when('/app/home');
         //$urlRouterProvider.otherwise('/app/customer_service');
-        $urlRouterProvider.otherwise('/access/signin');
+        $urlRouterProvider.otherwise('/access/login');
         $stateProvider
             .state('app', {
                 abstract: true,
@@ -49,24 +49,24 @@ angular.module('app').run(
                 url: '/access',
                 template: '<div ui-view class="fade-in-right-big smooth"></div>'
             })
-            .state('access.signin', {
-                url: '/signin',
-                templateUrl: 'tpl/signin.html',
+            .state('access.login', {
+                url: '/login',
+                templateUrl: 'tpl/login.html',
                 resolve: {
                     deps: ['uiLoad',
                         function (uiLoad) {
-                            return uiLoad.load(['js/controllers/signin.js']);
+                            return uiLoad.load(['js/controllers/login.js']);
                         }
                     ]
                 }
             })
-            .state('access.signup', {
-                url: '/signup',
-                templateUrl: 'tpl/signup.html',
+            .state('access.register', {
+                url: '/register',
+                templateUrl: 'tpl/register.html',
                 resolve: {
                     deps: ['uiLoad',
                         function (uiLoad) {
-                            return uiLoad.load(['js/controllers/signup.js']);
+                            return uiLoad.load(['js/controllers/register.js']);
                         }
                     ]
                 }

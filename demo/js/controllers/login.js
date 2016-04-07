@@ -12,15 +12,16 @@ app.controller('SigninFormController', ['$scope', '$http', '$state', '$rootScope
         $scope.authError = null;
 
         $scope.login = function() {
-            $scope.authError = null;
 
-            param.telephone = $scope.user.telephone;
-            param.password = $scope.user.password;
+            $scope.authError = null;
 
             $http({
                 url: app.url.login,
                 method: 'post',
-                data: param
+                data: {
+                    telephone: $scope.user.telephone,
+                    password: $scope.user.password
+                }
             }).then(function(response) {
                 if (response.data.resultCode === 1) {
                 } else {
@@ -29,6 +30,10 @@ app.controller('SigninFormController', ['$scope', '$http', '$state', '$rootScope
             }, function(x) {
                 $scope.authError = '服务器错误';
             });
+        };
+
+        $scope.register = function() {
+            $state.go('access.register');
         };
     }
 ]);

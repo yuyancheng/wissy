@@ -23,7 +23,7 @@
 
         var len = modules.length;
 
-        // 遍历每个模块，初始化所有外部接口
+        // 遍历每个模块，初始化所有对外接口
         while( len -- ){
             var md = require(modules[len]);
             if(!md || !md.APIs) {
@@ -39,22 +39,24 @@
                 for(var j=0; j<l; j++){
                     switch (api.type[j]){
                         case 'get':
-                            //if(api.path && api.fun) exp.get(api.path, api.fun.ref);
-                            if(api.path && api.fun) exp.get(api.path, function(req, res){
-                                api.fun.ref(req.query, res);
-                            });
+                            if(api.path && api.fun) {
+                                exp.get(api.path, api.fun.ref);
+                            }
                             break;
                         case 'post':
-                            //if(api.path && api.fun) exp.post(api.path, api.fun.ref);
-                            if(api.path && api.fun) exp.post(api.path, function(req, res){
-                                api.fun.ref(req.body, res);
-                            });
+                            if(api.path && api.fun) {
+                                exp.post(api.path, api.fun.ref);
+                            }
                             break;
                         case 'delete':
-                            if(api.path && api.fun) exp.delete(api.path, api.fun.ref);
+                            if(api.path && api.fun) {
+                                exp.delete(api.path, api.fun.ref);
+                            }
                             break;
                         case 'update':
-                            if(api.path && api.fun) exp.update(api.path, api.fun.ref);
+                            if(api.path && api.fun) {
+                                exp.update(api.path, api.fun.ref);
+                            }
                             break;
                         default: break;
                     }
@@ -64,24 +66,6 @@
             if(md.name){
                 console.log('Interface [' + md.name + '] heave been initialized!');
             }
-
-
-            /*if(md && md.init){
-                md.init(exp);
-            }*/
-        }
-    };
-
-    apiLoader.make = function(that, APIs){
-        var len = APIs.length;
-
-        for(var i=0; i<len; i++){
-            exp.get(APIs[i].path + APIs[i].name, function (req, res){
-                res.send( eval('that.' + APIs[i].name + '.call(null, req.query)') ) ;
-            });
-            exp.post(APIs[i].path + APIs[i].name, function (req, res){
-                res.send( eval('that.' + APIs[i].name + '.call(null, req.body)') );
-            });
         }
     };
 
