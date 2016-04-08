@@ -45,17 +45,30 @@
             telephone: req.body.telephone
         };
 
+
         db_loader.query('user', filter, function(data){
             console.log('login.query: ' + data);
             if(data[0].password == req.body.password){
-                res.send({
-                    code: code.OK,
-                    msg: 'Validate success!'
+                // 记录用户登录信息
+                db_loader.insert('token', {
+                    telephone: req.body.telephone,
+                    time_long: new Date().getTime() + 1000 * 60 * 60
+                }, null, function(dt){
+                    if(dt && dt.result && dt.result.ok){
+                        res.send({
+                            'Content-Type' : 'javascript/application;charset=utf-8'
+                        },{
+                            code: code.OK,
+                            token: dt.insertedId.id,
+                            msg: 'Validate success!'
+                        });
+                    }
                 });
             }
         });
     };
 
+    // 退出
     function logout (req, res){
         var filter = {};
 
@@ -70,6 +83,7 @@
         });
     };
 
+    // 注册
     function register(req, res){
         var user_info = {};
         var param_names = [];
@@ -105,16 +119,14 @@
         // 查询账号是否已注册
         db_loader.query('user', filter, function(data){
             // 查账号已注册
-            if(data){
-                //console.info('register.query: ' + data);
+            if(data.lenght > 0){
                 res.send({
                     code: code.EXIST,
                     msg: 'This user is exist!'
                 });
             }else{
                 // 添加用户信息
-                db_loader.add('user', user_info, null, function(data){
-                    //console.info('register.add: ' + data);
+                db_loader.insert('user', user_info, null, function(data){
                     if(data && data.ok){
                         res.send({
                             code: code.OK,
