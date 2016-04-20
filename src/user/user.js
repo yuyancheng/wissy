@@ -13,15 +13,15 @@
         { 'path': '/user/register', type: ['post'], 'fun': {'ref': register, 'param': ['telephone', 'name', 'password']}  },
     ];
 
-    user.init = function (exp){
+    /*user.init = function (exp){
         var len = APIs.length;
         for(var i=0; i<len; i++){
             exp.get(APIs[i].path, APIs[i].fun);
             exp.post(APIs[i].path, APIs[i].fun);
         }
-    };
+    };*/
 
-    function login (req, res){;
+    function login (req, res){
 
         var param_names = [];
 
@@ -44,7 +44,6 @@
         var filter = {
             telephone: req.body.telephone
         };
-
 
         db_loader.query('user', filter, function(data){
             console.log('login.query: ' + data);

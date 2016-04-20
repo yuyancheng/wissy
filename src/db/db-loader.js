@@ -6,7 +6,7 @@
     var MongoClient = require('mongodb').MongoClient,
         assert = require('assert'),
         DBName = 'wissy',
-        url = 'mongodb://localhost:27017/';
+        URL = 'mongodb://localhost:27017/';
 
 
     dbLoader.init = function (){
@@ -25,21 +25,20 @@
     };
 
     function setDB(db){
-        if(url){
+        if(db){
             DBName = db;
         }
     }
 
     function setURL(url){
         if(url){
-            url = url;
+            URL = url;
         }
-        url = url;
     }
 
     // 链接到数据库
     function connect(fun){
-        MongoClient.connect(url + DBName, function(err, db) {
+        MongoClient.connect(URL + DBName, function(err, db) {
             assert.equal(null, err);
             console.log("Connected correctly to server.");
             fun(db);
@@ -48,57 +47,48 @@
 
     function findOne(sets, factor, fun){
         connect(function(db){
-            var data = [];
             var cursor = db.collection(sets).find(factor);
-            cursor.toArray(function(err, doc){
-                if(doc){
-                    fun(doc);
-                }
-            });
-            //var docs = cursor.hasNext() ? cursor.next(): null;
-            //cursor.objsLeftInBatch();
-            //fun(docs);
-            /*cursor.each(function (err, dt) {
-             assert.equal(err, null);
-             if (dt != null) {
-             data.push(dt);
-             //console.dir(doc);
-             } else {
-             db.close();
-             }
-             });*/
-            //data = cursor.objsLeftInBatch();
-            //fun(data);
-        });
-    };
-
-    function query(sets, factor, fun){
-        connect(function(db){
-            var data = [];
-            var cursor = db.collection(sets).find(factor);
-            cursor.toArray(function(err, doc){
-                if(doc){
-                    fun(doc);
-                }
-            });
-            //var docs = cursor.hasNext() ? cursor.next(): null;
-            //cursor.objsLeftInBatch();
-            //fun(docs);
-            /*cursor.each(function (err, dt) {
+            cursor.each(function (err, dt) {
                 assert.equal(err, null);
                 if (dt != null) {
-                    data.push(dt);
-                    //console.dir(doc);
+                    console.dir(doc);
+                    fun(doc);
                 } else {
                     db.close();
                 }
-            });*/
-            //data = cursor.objsLeftInBatch();
-            //fun(data);
+            });
+        });
+    };
+
+    function findMany(sets, factor, fun){
+        connect(function(db){
+            var cursor = db.collection(sets).find(factor);
+            cursor.toArray(function(err, doc){
+                if(doc){
+                    fun(doc);
+                }
+            });
         });
     };
 
     function insertOne(sets, dt, factor, fun){
+        if(!dt){
+            fun(null);
+        }
+
+        connect(function(db){
+            db.collection(sets).insertOne(dt, null, function(err, result) {
+                assert.equal(err, null);
+                if(fun) {
+                    fun(result);
+                }
+                db.close();
+            });
+        });
+    };
+
+    // 无则插入，有则更新
+    function insertOrUpdate(sets, dt, factor, fun){
         if(!dt){
             fun(null);
         }
@@ -131,7 +121,8 @@
     };
 
     module.exports = dbLoader;
-    module.exports.query = query;
+    module.exports.findOne = findOne;
+    module.exports.findMany = findMany;
     module.exports.insertOne = insertOne;
     module.exports.insertMany = insertMany;
 

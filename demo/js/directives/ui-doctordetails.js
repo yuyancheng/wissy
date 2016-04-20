@@ -241,7 +241,7 @@ app.directive('doctorDetails', ['uiLoad', 'JQ_CONFIG', '$document', '$http', 'Do
                         return;
                     }
                     scope.isLoading = true;
-                    // 获取医生其它信息
+                    // 获取医生其他信息
                     $http({
                         url: app.url.yiliao.getUserDetail,
                         data: {
