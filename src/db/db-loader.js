@@ -48,12 +48,11 @@
     function findOne(sets, factor, fun){
         connect(function(db){
             var cursor = db.collection(sets).find(factor);
-            cursor.each(function (err, dt) {
+            cursor.each(function (err, doc) {
                 assert.equal(err, null);
-                if (dt != null) {
-                    console.dir(doc);
+                if (err === null) {
+                    //console.dir(doc);
                     fun(doc);
-                } else {
                     db.close();
                 }
             });
@@ -64,8 +63,9 @@
         connect(function(db){
             var cursor = db.collection(sets).find(factor);
             cursor.toArray(function(err, doc){
-                if(doc){
+                if(err === null){
                     fun(doc);
+                    db.close();
                 }
             });
         });
