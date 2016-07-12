@@ -47,21 +47,23 @@
 
         db_loader.findOne('user', filter, function(data){
             console.log('login.query: ' + data);
-            if(data[0].password == req.body.password){
+            if(data && data.password == req.body.password && data.telephone == req.body.telephone){
                 // 记录用户登录信息
-                db_loader.insert('token', {
-                    telephone: req.body.telephone,
+                db_loader.insertOrUpdate('login_token', {
                     time_long: new Date().getTime() + 1000 * 60 * 60
-                }, null, function(dt){
+                }, {telephone: req.body.telephone}, function(dt){
                     if(dt && dt.result && dt.result.ok){
                         res.send({
-                            'Content-Type' : 'javascript/application;charset=utf-8'
-                        },{
                             code: code.OK,
                             token: dt.insertedId.id,
                             msg: 'Validate success!'
                         });
                     }
+                });
+            }else{
+                res.send({
+                    code: code.ERROR,
+                    msg: 'User or Password is not right!'
                 });
             }
         });
@@ -121,7 +123,7 @@
             if (data) {
                 res.send({
                     code: code.EXIST,
-                    msg: 'This user is exist!'
+                    msg: 'This user is existent, just check in, please!'
                 });
             } else {
                 // 添加用户信息

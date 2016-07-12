@@ -25,7 +25,7 @@ app.controller('SigninFormController', ['$scope', '$http', '$state', '$rootScope
             }).then(function(response) {
                 if (response.data.resultCode === 1) {
                 } else {
-                    $scope.authError = response.data.resultMsg;
+                    $scope.authError = response.data.msg;
                 }
             }, function(x) {
                 $scope.authError = '服务器错误';
