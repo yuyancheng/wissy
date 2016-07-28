@@ -55,7 +55,7 @@
                     if(dt && dt.result && dt.result.ok){
                         res.send({
                             code: code.OK,
-                            token: dt.insertedId.id,
+                            //token: dt.insertedId.id,
                             msg: 'Validate success!'
                         });
                     }
