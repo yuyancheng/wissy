@@ -20,6 +20,12 @@
     <link rel="stylesheet" href="lib/simple-line-icons/css/simple-line-icons.css" type="text/css" />
     <link rel="stylesheet" href="css/chat.css" type="text/css" />
     <!--<script data-main="js/conf.js" src="lib/require/require.js"></script>-->
+
+    <style type="text/css" rel="stylesheet">
+        .tbl tbody tr:nth-child(even) td{
+            background-color: #efefef;
+        }
+    </style>
 </head>
 
 <body ng-controller="AppCtrl">
@@ -35,7 +41,7 @@
         </select>
     </div>
 
-    <div id="example"></div>
+    <div id="dataTable"></div>
 
 
     <script src="lib/jquery/dist/jquery.min.js"></script>
@@ -43,6 +49,7 @@
     <script src="lib/react-0.14.7/build/react-dom.min.js"></script>
     <script src="lib/react-0.14.7/build/browser.min.js"></script>
 
+    <script src="js/react/build/pagination/pagination.js"></script>
     <script src="js/react/build/actable/actable.js"></script>
     <script src="js/react/build/demo.js"></script>
 </body>

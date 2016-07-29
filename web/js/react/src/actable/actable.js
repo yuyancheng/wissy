@@ -2,15 +2,47 @@
 
 var Actable = React.createClass({
     getInitialState: function () {
-        console.log(this.props.dataSrc);
-        console.log(this.props.thead);
+        console.log(this.props.data);
+        console.log(this.props.tHeadKey);
+
         return this.props;
     },
     render: function () {
-        return (
-            <table>
-                < Acthead dataSrc = {this.props.thead}/>
+        var hData = this.props.tHeadKey,
+            bData = this.props.data,
+            hItem = [],
+            bItem = [],
+            n = 0,
+            props = this.props;
 
+        this.props.onDataChange = function () {
+            //this.setState();
+            alert(32432432)
+        };
+
+        for(var k in hData){
+            bItem.push({
+                ['bItemName' + n] : hData[k]
+            });
+
+            hItem.push(k);
+            n ++;
+        }
+        
+        return (
+            <table className="table dataTable tbl">
+                {
+                    (function () {
+                        return (props.tHeadName);
+                    })()
+                }
+                {
+                    (function () {
+                        return (
+                            < Actbody data = {props.data} itemName = {bItem} />
+                        );
+                    })()
+                }
             </table>
         );
     }
@@ -21,9 +53,11 @@ var Acthead = React.createClass({
         return this.props;
     },
     render: function () {
+        var data = this.props.data;
+
         return (
             <thead>
-                <Actr dataSrc = {this.props.dataSrc} />
+                <Actr dataSrc = {data} />
             </thead>
         );
     }
@@ -34,9 +68,21 @@ var Actbody = React.createClass({
         return this.props;
     },
     render: function () {
+        var dts = this.props.data,
+            bItem = this.props.itemName;
         return (
             <tbody>
-
+            {
+                dts.map(function (dt, i) {
+                    var data = [], idx = 0;
+                    for(var k in dt){
+                        data.push(dt[bItem[idx]['bItemName' + idx ++]]);
+                    }
+                    return (
+                        <Actr data = {data} />
+                    );
+                })
+            }
             </tbody>
         );
     }
@@ -47,13 +93,14 @@ var Actr = React.createClass({
         return this.props;
     },
     render: function () {
-        var dts = this.props.dataSrc;
+        var dts = this.props.data;
+
         return (
             <tr>
                 {
-                    dts.each(function (dt) {
+                    dts.map(function (dt, i) {
                         return (
-                            <Actd dataSrc = {dt}/>
+                            <Actd data = {dt} />
                         );
                     })
                 }
@@ -68,7 +115,7 @@ var Actd = React.createClass({
     },
     render: function () {
         return (
-            <td>{this.props}</td>
+            <td key = {this.props.data}>{this.props.data}</td>
         );
     }
 });

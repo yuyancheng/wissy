@@ -1,15 +1,14 @@
 'use strict';
 
-var Actable = React.createClass({displayName: "Actable",
+var Pagination = React.createClass({displayName: "Pagination",
     getInitialState: function () {
-        console.log(this.props.data);
-        console.log(this.props.tHeadKey);
+        console.log(this.props.dataSrc);
 
         return this.props;
     },
     render: function () {
-        var hData = this.props.tHeadKey,
-            bData = this.props.data,
+        var hData = this.props.thead,
+            bData = this.props.dataSrc,
             hItem = [],
             bItem = [],
             n = 0,
@@ -33,13 +32,15 @@ var Actable = React.createClass({displayName: "Actable",
             React.createElement("table", {className: "table dataTable tbl"}, 
                 
                     (function () {
-                        return (props.tHeadName);
+                        return (
+                            React.createElement(Acthead, {dataSrc: hItem})
+                        );
                     })(), 
                 
                 
                     (function () {
                         return (
-                            React.createElement(Actbody, {data: props.data, itemName: bItem})
+                            React.createElement(Actbody, {dataSrc: props.dataSrc, itemName: bItem})
                         );
                     })()
                 
@@ -53,7 +54,7 @@ var Acthead = React.createClass({displayName: "Acthead",
         return this.props;
     },
     render: function () {
-        var data = this.props.data;
+        var data = this.props.dataSrc;
 
         return (
             React.createElement("thead", null, 
@@ -68,7 +69,7 @@ var Actbody = React.createClass({displayName: "Actbody",
         return this.props;
     },
     render: function () {
-        var dts = this.props.data,
+        var dts = this.props.dataSrc,
             bItem = this.props.itemName;
         return (
             React.createElement("tbody", null, 
@@ -79,7 +80,7 @@ var Actbody = React.createClass({displayName: "Actbody",
                         data.push(dt[bItem[idx]['bItemName' + idx ++]]);
                     }
                     return (
-                        React.createElement(Actr, {data: data})
+                        React.createElement(Actr, {dataSrc: data})
                     );
                 })
             
@@ -93,14 +94,14 @@ var Actr = React.createClass({displayName: "Actr",
         return this.props;
     },
     render: function () {
-        var dts = this.props.data;
+        var dts = this.props.dataSrc;
 
         return (
             React.createElement("tr", null, 
                 
                     dts.map(function (dt, i) {
                         return (
-                            React.createElement(Actd, {data: dt})
+                            React.createElement(Actd, {dataSrc: dt})
                         );
                     })
                 
@@ -115,7 +116,7 @@ var Actd = React.createClass({displayName: "Actd",
     },
     render: function () {
         return (
-            React.createElement("td", {key: this.props.data}, this.props.data)
+            React.createElement("td", {key: this.props.dataSrc}, this.props.dataSrc)
         );
     }
 });

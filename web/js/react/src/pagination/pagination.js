@@ -1,15 +1,14 @@
 'use strict';
 
-var Actable = React.createClass({displayName: "Actable",
+var Pagination = React.createClass({
     getInitialState: function () {
-        console.log(this.props.data);
-        console.log(this.props.tHeadKey);
+        console.log(this.props.dataSrc);
 
         return this.props;
     },
     render: function () {
-        var hData = this.props.tHeadKey,
-            bData = this.props.data,
+        var hData = this.props.thead,
+            bData = this.props.dataSrc,
             hItem = [],
             bItem = [],
             n = 0,
@@ -30,92 +29,94 @@ var Actable = React.createClass({displayName: "Actable",
         }
         
         return (
-            React.createElement("table", {className: "table dataTable tbl"}, 
-                
-                    (function () {
-                        return (props.tHeadName);
-                    })(), 
-                
-                
+            <table className="table dataTable tbl">
+                {
                     (function () {
                         return (
-                            React.createElement(Actbody, {data: props.data, itemName: bItem})
+                            < Acthead dataSrc={hItem} />
                         );
                     })()
-                
-            )
+                }
+                {
+                    (function () {
+                        return (
+                            < Actbody dataSrc = {props.dataSrc} itemName = {bItem} />
+                        );
+                    })()
+                }
+            </table>
         );
     }
 });
 
-var Acthead = React.createClass({displayName: "Acthead",
+var Acthead = React.createClass({
     getInitialState: function () {
         return this.props;
     },
     render: function () {
-        var data = this.props.data;
+        var data = this.props.dataSrc;
 
         return (
-            React.createElement("thead", null, 
-                React.createElement(Actr, {dataSrc: data})
-            )
+            <thead>
+                <Actr dataSrc = {data} />
+            </thead>
         );
     }
 });
 
-var Actbody = React.createClass({displayName: "Actbody",
+var Actbody = React.createClass({
     getInitialState: function () {
         return this.props;
     },
     render: function () {
-        var dts = this.props.data,
+        var dts = this.props.dataSrc,
             bItem = this.props.itemName;
         return (
-            React.createElement("tbody", null, 
-            
+            <tbody>
+            {
                 dts.map(function (dt, i) {
                     var data = [], idx = 0;
                     for(var k in dt){
                         data.push(dt[bItem[idx]['bItemName' + idx ++]]);
                     }
                     return (
-                        React.createElement(Actr, {data: data})
+                        <Actr dataSrc = {data} />
                     );
                 })
-            
-            )
+            }
+            </tbody>
         );
     }
 });
 
-var Actr = React.createClass({displayName: "Actr",
+var Actr = React.createClass({
     getInitialState: function () {
         return this.props;
     },
     render: function () {
-        var dts = this.props.data;
+        var dts = this.props.dataSrc;
 
         return (
-            React.createElement("tr", null, 
-                
+            <tr>
+                {
                     dts.map(function (dt, i) {
                         return (
-                            React.createElement(Actd, {data: dt})
+                            <Actd dataSrc = {dt} />
                         );
                     })
-                
-            )
+                }
+            </tr>
         );
     }
 });
 
-var Actd = React.createClass({displayName: "Actd",
+var Actd = React.createClass({
     getInitialState: function () {
         return this.props;
     },
     render: function () {
         return (
-            React.createElement("td", {key: this.props.data}, this.props.data)
+            <td key = {this.props.dataSrc}>{this.props.dataSrc}</td>
         );
     }
 });
