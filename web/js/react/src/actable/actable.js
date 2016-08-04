@@ -147,15 +147,20 @@ var Pagination = React.createClass({
         var that = this;
         var dts = [1,2,3,4,5,6,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31];
         var pageSize = 5;
-        var total = 69;
+        var total = 66;
         var start = 0;
         var pageIndex = 0;
         var linkSize = that.props.options.linkSize;
         var linkTotal = 0;
+        var links = [];
+        var len = 0;
 
-        if(linkSize < pageSize){
-
-        }
+        //if(linkSize < pageSize){
+            len = Math.ceil(total / pageSize);
+            for(var i=1; i<=len; i++){
+                links.push(i);
+            }
+        //}
 
         return (
             <div className="text-right">
@@ -163,56 +168,39 @@ var Pagination = React.createClass({
                     {
                         (function () {
                             return (
-                                <li className="paginate_button" /*onClick={that.turnTo(i)}*/>
+                                <li className="paginate_button" onClick={that.turnTo}>
                                     <a href='#'>{'<'}</a>
                                 </li>
                             );
                         })()
                     }
                     {
-                        /*dts.map(function (dt, i) {
-                            if(i === 5){
+                        links.map(function (dt, i) {
+                            if (i + 1 === linkSize) {
                                 return (
-                                    <li className="paginate_button disabled" /!*onClick={that.turnTo(i)}*!/>
+                                    <li className="paginate_button disabled">
                                         <a href='#'>{'...'}</a>
+                                    </li>
+                                );
+                            }else if(i === linkSize){
+                                return (
+                                    <li className="paginate_button" param={len} onClick={that.turnTo}>
+                                        <a href='#'>{len}</a>
                                     </li>
                                 );
                             }else{
                                 return (
-                                    <li className="paginate_button" /!*onClick={that.turnTo(i)}*!/>
-                                        <a href='#'>{dt}</a>
+                                    <li className="paginate_button" param={i + 1} onClick={that.turnTo}>
+                                        <a href='#'>{i + 1}</a>
                                     </li>
                                 );
                             }
-                        })*/
-                        (function () {
-                            for(var i=1; i<=linkSize + 1; i++) {
-                                if (i === 5) {
-                                    return (
-                                        <li className="paginate_button disabled">
-                                            <a href='#'>{'...'}</a>
-                                        </li>
-                                    );
-                                }else if(i + 1 === linkSize){
-                                    return (
-                                        <li className="paginate_button">
-                                            <a href='#'>{linkTotal}</a>
-                                        </li>
-                                    );
-                                }else{
-                                    return (
-                                        <li className="paginate_button">
-                                            <a href='#'>{i}</a>
-                                        </li>
-                                    );
-                                }
-                            }
-                        })()
+                        })
                     }
                     {
                         (function () {
                             return (
-                                <li className="paginate_button" /*onClick={that.turnTo(i)}*/>
+                                <li className="paginate_button" onClick={that.turnTo}>
                                     <a href='#'>{'>'}</a>
                                 </li>
                             );
