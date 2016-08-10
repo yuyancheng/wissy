@@ -55,23 +55,42 @@ $.ajax({
             data = resp.pageData;
 
             ReactDOM.render(
-
                 <div>
-                    <Actable data = {data} dataSrc = {data} tHeadKey = {['id','name','sex','relation','age','telephone']} tHeadName = {
+                    <Actable data={data} dataSrc={data} tHeadKey={['id','name','sex','relation','age','telephone']} tHeadName={
                         <thead>
                             <tr><td rowSpan="2">ID</td><td>姓名</td><td>性别</td><td rowSpan="2">关系</td><td>年龄</td><td>手机号</td></tr>
                             <tr><td></td><td></td><td></td><td></td></tr>
                         </thead>
-                    } onDataChange = {df} translation = {translation} processing = {true} pagination = {{
+                    } onDataChange={df} translation={translation} processing={true} pagination={{
                         linkSize: 5
-                    }} options = {{
-                        lengthMenu: [5, 10, 20, 50, 100],
+                    }} options={{
+                        lengthMenu: [3, 5, 10, 20, 50, 100],
                         search: false
-                    }} className = "table dataTable tbl"/>
-                    
-                <button onClick = {Alert}>SET</button>
+                    }} className="table dataTable tbl"/>
+
+                    <button onClick={Alert}>SET</button>
                 </div>,
                 document.getElementById('dataTable')
+            );
+
+            
+            return;
+            ReactDOM.render(
+                <div>
+                    <Actable data={data} dataSrc={data} tHeadKey={['id','name','sex','relation','age','telephone']} tHeadName={
+                        <thead>
+                            <tr><td>ID</td><td>姓名</td><td>性别</td><td>关系</td><td>年龄</td><td>手机号</td></tr>
+                        </thead>
+                    } onDataChange={df} translation={translation} processing={true} pagination={{
+                        linkSize: 6
+                    }} options={{
+                        lengthMenu: [5, 7, 11],
+                        search: false
+                    }} className="table dataTable tbl"/>
+
+                    <button onClick={Alert}>SET</button>
+                </div>,
+                document.getElementById('dataTable2')
             );
         }
     }
