@@ -85,12 +85,13 @@ var Actable = React.createClass({
                 </table>
                 {
                     (function () {
+                        // 是否添加分页控件
                         if (that.props.pagination && Pagination && typeof Pagination === 'function') {
                             if(that.pageSize){
                                 that.props.pagination.pageSize = that.pageSize
                             }
                             return (
-                                <Pagination total={that.total} options={that.props.pagination} host={that}/>
+                                <Pagination total={that.total} options={that.props.pagination} host={that} />
                             );
                         }
                     })()
@@ -208,7 +209,16 @@ var Pagination = React.createClass({
         //console.log('pagination: ' + this.props.total);
         this.index = 0;
         this.size = 0;
-        return this.props;
+        this.links = [];
+        this.linkSize = 10;
+
+        if (this.props.options.linkSize) {
+            this.linkSize = this.props.options.linkSize;
+        }
+
+        return {
+            links: this.links
+        };
     },
     turnTo: function (idx) {
         this.index = idx;
@@ -219,33 +229,63 @@ var Pagination = React.createClass({
             this.index --;
         }
         this.turnTo(this.index);
+
+        this.rePaint();
     },
     next: function () {
         if(this.index < this.size - 1){
             this.index ++;
         }
         this.turnTo(this.index);
+
+        this.rePaint();
     },
-    render: function () {
-        var that = this;
-        var dts = [1, 2, 3, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31];
-        var pageSize = that.props.options.pageSize;
+    init: function () {
         var total = 66;
         var start = 0;
         var pageIndex = 0;
-        var linkSize = 10;
+
+        var total = this.props.total;
+        var pageSize = this.props.options.pageSize;
+
+        this.state.links = [];
+
+        this.size = Math.ceil(total / pageSize);
+        for (var i = 1; i <= this.linkSize + 2;i++) {
+            if (i == this.linkSize + 1) {
+                this.state.links.push('.');
+            }else if(i == this.linkSize + 2){
+                this.state.links.push(this.size);
+            }else{
+                this.state.links.push(i);
+            }
+        }
+    },
+    rePaint: function () {
         var links = [];
-
-        if (that.props.options.linkSize) {
-            linkSize = that.props.options.linkSize;
+        for (var i = 1; i <= this.linkSize + 2;i++) {
+            if (i == this.linkSize + 1 && this.size - i <= this.index) {
+                links.push('.');
+            }else if(this.index >= this.linkSize && i == 2){
+                links.push('.');
+            }else if(i == this.linkSize + 2){
+                links.push(this.size);
+            }else{
+                links.push(i);
+            }
         }
+        this.setState({
+            links: links
+        });
+    },
+    componentWillMount: function () {
+        this.init();
+    },
+    componentDidMount: function () {
 
-        total = this.props.total;
-
-        that.size = Math.ceil(total / pageSize);
-        for (var i = 1; i <= that.size; i++) {
-            links.push(i);
-        }
+    },
+    render: function () {
+        var that = this;
 
         return (
             <div className="text-right">
@@ -260,29 +300,28 @@ var Pagination = React.createClass({
                         })()
                     }
                     {
-                        links.map(function (dt, i) {
+                        that.state.links.map(function (dt, i) {
 
-                            if (i > linkSize) {
-                                // linkSize后面的页码不显示
-                                return;
+                            /*if (i > that.linkSize) {
+                                return;     // linkSize后面的页码不显示
                             }
-
-                            if (links.length > linkSize && i + 1 === linkSize) {
+*/
+                            if (dt == '.') {
                                 return (
                                     <li className="paginate_button disabled">
                                         <a href='#'>{'...'}</a>
                                     </li>
                                 );
-                            } else if (i === linkSize) {
+                            } else if(that.index + 1 === dt){
                                 return (
-                                    <li className="paginate_button" param={that.size} onClick={that.turnTo.bind(that,that.size-1)}>
-                                        <a href='#'>{that.size}</a>
+                                    <li className="paginate_button active" param={dt} onClick={that.turnTo.bind(that,dt-1)}>
+                                        <a href='#'>{dt}</a>
                                     </li>
                                 );
                             } else {
                                 return (
-                                    <li className="paginate_button" param={i + 1} onClick={that.turnTo.bind(that,i)}>
-                                        <a href='#'>{i + 1}</a>
+                                    <li className="paginate_button" param={dt} onClick={that.turnTo.bind(that,dt-1)}>
+                                        <a href='#'>{dt}</a>
                                     </li>
                                 );
                             }
