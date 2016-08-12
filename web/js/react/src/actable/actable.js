@@ -16,11 +16,17 @@ var Actable = React.createClass({
 
         this.updateDataSource(0, this.pageSize);
 
+        if(this.props.pagination && this.props.pagination.linkSize){
+            var linkSize = this.props.pagination.linkSize;
+        }else{
+            var linkSize = 5;
+        }
+
         return {
             source: this.props.data,
             head: this.props.tHeadKey,
             pageSize: 10,
-            linkSize: 5
+            linkSize: linkSize
         };
     },
     updateDataSource: function (index, pageSize) {
@@ -223,22 +229,19 @@ var Pagination = React.createClass({
     turnTo: function (idx) {
         this.index = idx;
         this.props.host.updateDataSource(idx);
+        this.rePaint();
     },
     prev: function () {
         if(this.index > 0){
             this.index --;
         }
         this.turnTo(this.index);
-
-        this.rePaint();
     },
     next: function () {
         if(this.index < this.size - 1){
             this.index ++;
         }
         this.turnTo(this.index);
-
-        this.rePaint();
     },
     init: function () {
         var total = 66;
@@ -249,8 +252,9 @@ var Pagination = React.createClass({
         var pageSize = this.props.options.pageSize;
 
         this.state.links = [];
-
         this.size = Math.ceil(total / pageSize);
+        this.linkSize = this.linkSize > this.size ? this.size : this.linkSize;
+
         for (var i = 1; i <= this.linkSize + 2;i++) {
             if (i == this.linkSize + 1) {
                 this.state.links.push('.');
@@ -261,18 +265,32 @@ var Pagination = React.createClass({
             }
         }
     },
-    rePaint: function () {
+    rePaint: function (idx) {
         var links = [];
-        for (var i = 1; i <= this.linkSize + 2;i++) {
-            if (i == this.linkSize + 1 && this.size - i <= this.index) {
+        // 0123456789   //this.index
+        // 12345678910    //i
+        // [1.456.10]    //links
+        // [1.567.10]    //links
+
+        for (var n = 1, i = 1; n <= this.linkSize + 2; i++) {
+            if(n != 1 && this.index >= this.linkSize && i <= this.index + 3 - this.linkSize && i <= this.size - this.linkSize){
+                if(links[1] != '.'){
+                    links[1] = '.';
+                    n ++;
+                }
+                continue;
+            }
+            if (i > this.size) {
+                break;
+            }
+            if(n == this.linkSize + 1 && this.index < this.size - 3){
                 links.push('.');
-            }else if(this.index >= this.linkSize && i == 2){
-                links.push('.');
-            }else if(i == this.linkSize + 2){
+            }else if(n == this.linkSize + 2){
                 links.push(this.size);
             }else{
                 links.push(i);
             }
+            n ++;
         }
         this.setState({
             links: links
@@ -301,11 +319,6 @@ var Pagination = React.createClass({
                     }
                     {
                         that.state.links.map(function (dt, i) {
-
-                            /*if (i > that.linkSize) {
-                                return;     // linkSize后面的页码不显示
-                            }
-*/
                             if (dt == '.') {
                                 return (
                                     <li className="paginate_button disabled">

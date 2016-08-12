@@ -62,7 +62,7 @@ $.ajax({
                             <tr><td></td><td></td><td></td><td></td></tr>
                         </thead>
                     } onDataChange={df} translation={translation} processing={true} pagination={{
-                        linkSize: 5
+                        linkSize: 11
                     }} options={{
                         lengthMenu: [3, 5, 10, 20, 50, 100],
                         search: false
@@ -82,7 +82,7 @@ $.ajax({
                             <tr><td>ID</td><td>姓名</td><td>性别</td><td>关系</td><td>年龄</td><td>手机号</td></tr>
                         </thead>
                     } onDataChange={df} translation={translation} processing={true} pagination={{
-                        linkSize: 6
+                        linkSize: 8
                     }} options={{
                         lengthMenu: [5, 7, 11],
                         search: false
