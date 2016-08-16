@@ -255,8 +255,14 @@ var Pagination = React.createClass({
         this.size = Math.ceil(total / pageSize);
         this.linkSize = this.linkSize > this.size ? this.size : this.linkSize;
 
-        for (var i = 1; i <= this.linkSize + 2;i++) {
-            if (i == this.linkSize + 1) {
+        if(this.size > this.linkSize + 2){
+            var len = this.linkSize + 2;
+        }else{
+            var len = this.size;
+        }
+
+        for (var i = 1; i <= len; i++) {
+            if (this.size > this.linkSize + 2 && i == this.linkSize + 1) {
                 this.state.links.push('.');
             }else if(i == this.linkSize + 2){
                 this.state.links.push(this.size);
@@ -267,11 +273,6 @@ var Pagination = React.createClass({
     },
     rePaint: function (idx) {
         var links = [];
-        // 0123456789   //this.index
-        // 12345678910    //i
-        // [1.456.10]    //links
-        // [1.567.10]    //links
-
         for (var n = 1, i = 1; n <= this.linkSize + 2; i++) {
             if(n != 1 && this.index >= this.linkSize && i <= this.index + 3 - this.linkSize && i <= this.size - this.linkSize){
                 if(links[1] != '.'){

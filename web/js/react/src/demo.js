@@ -1,5 +1,7 @@
 'use strict';
 
+//import {router, route, hasHistory} from 'react-router';
+
 $.ajax({
     type: 'post',
     url: 'js/data/patient.json',
@@ -58,11 +60,10 @@ $.ajax({
                 <div>
                     <Actable data={data} dataSrc={data} tHeadKey={['id','name','sex','relation','age','telephone']} tHeadName={
                         <thead>
-                            <tr><td rowSpan="2">ID</td><td>姓名</td><td>性别</td><td rowSpan="2">关系</td><td>年龄</td><td>手机号</td></tr>
-                            <tr><td></td><td></td><td></td><td></td></tr>
+                            <tr><td>ID</td><td>姓名</td><td>性别</td><td>关系</td><td>年龄</td><td>手机号</td></tr>
                         </thead>
                     } onDataChange={df} translation={translation} processing={true} pagination={{
-                        linkSize: 11
+                        linkSize: 9
                     }} options={{
                         lengthMenu: [3, 5, 10, 20, 50, 100],
                         search: false
@@ -74,7 +75,7 @@ $.ajax({
             );
 
             
-            return;
+
             ReactDOM.render(
                 <div>
                     <Actable data={data} dataSrc={data} tHeadKey={['id','name','sex','relation','age','telephone']} tHeadName={
