@@ -1,6 +1,14 @@
 'use strict';
 
-//import {router, route, hasHistory} from 'react-router';
+/*import React from 'react'
+import { render } from 'react-dom'
+import { Router, Route, Link } from 'react-router'*/
+
+var Router = ReactRouter.Router
+var Route = ReactRouter.Route
+var Link = ReactRouter.Link
+var hashHistory = ReactRouter.hashHistory
+var IndexRoute = ReactRouter.IndexRoute
 
 $.ajax({
     type: 'post',
@@ -35,7 +43,7 @@ $.ajax({
             //data = dt;
             df.setSt(dt);
         };
-        
+
         var translation = {
             "lengthMenu": "每页 _MENU_ 条",
             "zeroRecords": "无数据",
@@ -74,24 +82,70 @@ $.ajax({
                 document.getElementById('dataTable')
             );
 
-            
+            //return;
 
-            ReactDOM.render(
-                <div>
-                    <Actable data={data} dataSrc={data} tHeadKey={['id','name','sex','relation','age','telephone']} tHeadName={
-                        <thead>
-                            <tr><td>ID</td><td>姓名</td><td>性别</td><td>关系</td><td>年龄</td><td>手机号</td></tr>
-                        </thead>
-                    } onDataChange={df} translation={translation} processing={true} pagination={{
-                        linkSize: 8
-                    }} options={{
-                        lengthMenu: [5, 7, 11],
-                        search: false
-                    }} className="table dataTable tbl"/>
+            const App = React.createClass({
+                render() {
+                    return (
+                        <div>
+                            <h1>App</h1>
+                            {/* change the <a>s to <Link>s */}
+                            <ul>
+                                <li><Link to="/about">About</Link></li>
+                                <li><Link to="/home">Home</Link></li>
+                            </ul>
 
-                    <button onClick={Alert}>SET</button>
-                </div>,
-                document.getElementById('dataTable2')
+                            {this.props.children}
+                        </div>
+                    )
+                }
+            })
+
+            const Home = React.createClass({
+                render() {
+                    return (
+                        <div>
+                            <h1>Home</h1>
+                            <User ></User>
+                        </div>
+                    )
+                }
+            })
+            const About = React.createClass({
+                params: {
+                    id: 'Jkei3c3299999'
+                },
+                render() {
+                    return (
+                        <div>
+                            <h1>About</h1>
+                        </div>
+                    )
+                }
+            })
+            const User = React.createClass({
+
+                render() {
+                    return (
+                        <div>
+                            <h1>User</h1>
+                        </div>
+                    )
+                }
+            })
+
+
+            ReactDOM.render((
+                    <Router history={hashHistory}>
+                        <Route path="/" component={App}>
+                            <IndexRoute component={Home}/>
+                            <Route path="home" component={Home}>
+
+                            </Route>
+                            <Route path="about/:id" component={About} params={{id:'Jkei3c3299999'}} />
+                        </Route>
+                    </Router>
+                ), document.getElementById('dataTable2')
             );
         }
     }

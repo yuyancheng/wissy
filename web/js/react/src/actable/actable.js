@@ -50,7 +50,7 @@ var Actable = React.createClass({
         var that = this;
 
         this.props.onDataChange.setSt = function (dt) {
-            that.updateDataSource(0, {source: dt});
+            that.updateDataSource(0, 1, {source: dt});
         };
 
         for (var k in hData) {

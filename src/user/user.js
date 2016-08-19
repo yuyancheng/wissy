@@ -4,7 +4,12 @@
     var code = require('./../common/config'),
         db_loader = require('./../db/db-loader'),
         user = {
-            name: 'User API'
+            name: 'User API',
+            desc: '',
+            version: '1.0.0',
+            author: 'yyc',
+            createdTime: '2016/08/12',
+            lastUpdatedTime: '2016/08/12'
         };
 
     user.APIs = [
