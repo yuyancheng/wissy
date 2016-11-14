@@ -4,6 +4,8 @@
 import { render } from 'react-dom'
 import { Router, Route, Link } from 'react-router'*/
 
+import Tpl_login from './login.jsx'
+
 var Router = ReactRouter.Router
 var Route = ReactRouter.Route
 var Link = ReactRouter.Link
@@ -91,6 +93,7 @@ $.ajax({
                             <h1>App</h1>
                             {/* change the <a>s to <Link>s */}
                             <ul>
+                                <li><Link to="/login">About</Link></li>
                                 <li><Link to="/about">About</Link></li>
                                 <li><Link to="/home">Home</Link></li>
                             </ul>
@@ -138,10 +141,9 @@ $.ajax({
             ReactDOM.render((
                     <Router history={hashHistory}>
                         <Route path="/" component={App}>
-                            <IndexRoute component={Home}/>
-                            <Route path="home" component={Home}>
-
-                            </Route>
+                            <IndexRoute component={Tpl_login}/>
+                            <Route path="login" component={Tpl_login}></Route>
+                            <Route path="home" component={Home}></Route>
                             <Route path="about/:id" component={About} params={{id:'Jkei3c3299999'}} />
                         </Route>
                     </Router>
@@ -150,4 +152,4 @@ $.ajax({
         }
     }
 });
-
+//57c83519b522256c12804818

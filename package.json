@@ -17,7 +17,9 @@
   },
   "description": "我的第一个应用",
   "main": "myApp.js",
-  "devDependencies": {},
+  "devDependencies": {
+    "webpack": "^2.1.0-beta.25"
+  },
   "repository": {
     "type": "git",
     "url": "nodeDemo"

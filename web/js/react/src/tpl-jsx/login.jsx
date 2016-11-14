@@ -1,5 +1,6 @@
+import React, { Component, PropTypes } from "react";
 
-var Tpl_login = React.createClass({
+export default class Tpl_login extends Component{
     render() {
         return (
             <div className="m-b-lg clear">
@@ -24,4 +25,4 @@ var Tpl_login = React.createClass({
             </div>
         )
     }
-});
+};
